@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { supabase } from "@/libs/supabaseClient";
 
@@ -29,14 +30,41 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 h-16 bg-[blue] shadow flex items-center justify-between px-4 md:px-8">
+    <nav className="fixed top-0 left-0 right-0 z-50 h-16 bg-white shadow flex items-center justify-between px-4 md:px-8">
+      <div className="w-[20vw] h-[7vw] overflow-hidden rounded-md">
       <Link href="/" className="text-lg font-bold">
-        Folio-Ready
+          <Image
+            src="/folioready.png"
+            alt="Folio-Ready"
+            width={150}
+            height={50}
+          />
       </Link>
+      </div>
+      <div className="flex items-center space-x-4">
+        <Link
+          href="/"
+          className="text-gray-700 hover:text-gray-900 hover:bg-[lightgray] transition-colors duration-300 rounded-md"
+        >
+          Pricing
+        </Link>
+        <Link
+          href="/about"
+          className="text-gray-700 hover:text-gray-900 hover:bg-[lightgray] transition-colors duration-300 rounded-md"
+        >
+          About
+        </Link>
+        <Link
+          href="/contact"
+          className="text-gray-700 hover:text-gray-900 hover:bg-[lightgray] transition-colors duration-300 rounded-md"
+        >
+          Contact
+        </Link>
+      </div>
       <div className="space-x-4">
         {isLoggedIn ? (
           <>
-          <Link
+            <Link
               href="/notifications"
               className="bg-[red] rounded-lg p-2 hover:bg-[grey]"
             >
@@ -63,17 +91,17 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            <Link
-              href="/auth/register"
-              className="bg-[black] rounded-lg p-2 hover:bg-[grey]"
-            >
-              register
-            </Link>
-            <Link
+          <Link
               href="/auth/login"
-              className="bg-[green] rounded-lg p-2 hover:bg-[grey]"
+              className="bg-[#F4F4F5] rounded-lg p-3 hover:bg-[#E4E4E7] transition-colors duration-300"
             >
               Log in
+            </Link>
+            <Link
+              href="/auth/register"
+              className="bg-[blue] text-white rounded-lg p-3"
+            >
+              Create Folio Now
             </Link>
           </>
         )}
