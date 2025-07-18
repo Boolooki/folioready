@@ -1,6 +1,6 @@
 'use client';
 
-import ProfileForm from '@/components/editor/ProfileForm';
+import ProfileForm from '@/app/editor/ProfileForm';
 
 export default function EditorPage() {
   return (
