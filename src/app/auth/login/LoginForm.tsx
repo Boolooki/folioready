@@ -6,63 +6,36 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/libs/supabaseClient";
 import Link from "next/link";
 import { fetchJson } from "@/libs/fetch";
+import { loginFormSchema, LoginFormValues } from "@/libs/validationLoginForm";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useLogin } from "@/hooks/useLogin";
 
-type LoginFormType = {
-  email: string;
-  password: string;
-};
+type props = { defaultValues: LoginFormValues };
 
-export default function LoginForm() {
+export default function LoginForm({ defaultValues }: props) {
   const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState("");
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginFormSchema),
+    defaultValues: defaultValues,
+  });
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<LoginFormType>();
+  } = form;
 
-  const onSubmit = async (formData: LoginFormType) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: formData.email,
-      password: formData.password,
-    });
+  const { onSignInWithPassword, onFetchUserProfile, errorMessage } = useLogin();
 
-    if (error) {
-      setErrorMessage(error.message);
-      return;
+  const onSubmit = async (formData: LoginFormValues) => {
+    const user = await onSignInWithPassword(formData);
+
+    const profile = await onFetchUserProfile(user);
+    
+    if (profile?.[0]?.is_pro) {
+      router.push("/dashboard/pro");
+    } else {
+      router.push("/dashboard");
     }
-
-    const user = data?.user;
-    if (user && !user.email_confirmed_at) {
-      setErrorMessage("โปรดยืนยันอีเมลก่อนเข้าสู่ระบบ");
-      return;
-    }
-
-    try {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      const profile = await fetchJson(
-        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/profiles?select=is_pro&id=eq.${user.id}`,
-        {
-          headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${session?.access_token}`,
-            Accept: "application/json",
-          },
-        }
-      );
-
-      if (profile?.[0]?.is_pro) {
-        router.push("/dashboard/pro");
-      } else {
-        router.push("/dashboard");
-      }
-    } catch (err) {
-      setErrorMessage("ไม่สามารถโหลดสถานะผู้ใช้ได้");
-    }
-
     router.push("/dashboard");
   };
 
@@ -119,3 +92,4 @@ export default function LoginForm() {
     </div>
   );
 }
+
