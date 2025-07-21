@@ -1,11 +1,8 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/libs/supabaseClient";
 import Link from "next/link";
-import { fetchJson } from "@/libs/fetch";
 import { loginFormSchema, LoginFormValues } from "@/libs/validationLoginForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLogin } from "@/hooks/useLogin";
