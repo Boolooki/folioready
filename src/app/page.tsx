@@ -17,18 +17,19 @@ export default function HomePage() {
           A powerful tools, designed for creators, developers, and designers
         </p>
         <p className="text-lg">
-           No code required. Fully customizable. Instantly impressive.
+          No code required. Fully customizable. Instantly impressive.
         </p>
         <div className="mt-10">
           <Link
             href="/auth/login"
             className="mt-4 bg-[blue] text-white p-4 rounded-lg hover:bg-[lightblue] transition-colors duration-200"
           >
-            Generate Your Portfolio <span className="text-[lightblue]">- Free*</span>
+            Generate Your Portfolio{" "}
+            <span className="text-[lightblue]">- Free*</span>
           </Link>
         </div>
         <p className="mt-15 text-sm">
-           No code required. Fully customizable. Instantly impressive.
+          No code required. Fully customizable. Instantly impressive.
         </p>
       </div>
       <HeroSection />
